@@ -1,0 +1,1396 @@
+.TH "RATPOISON" "1" "2017-03-09" "OpenBSD 6.1" "General Commands Manual"
+.nh
+.if n .ad l
+.SH "NAME"
+\fBratpoison\fR
+\- window manager without mouse dependency
+.SH "SYNOPSIS"
+.HP 10n
+\fBratpoison\fR
+[\fB\-hv\fR]
+.PD 0
+.HP 10n
+\fBratpoison\fR
+[\fB\-d\fR\ \fIdpy\fR]
+[\fB\-s\fR\ \fInum\fR]
+[\fB\-f\fR\ \fIfile\fR]
+.br
+.HP 10n
+\fBratpoison\fR
+[\fB\-d\fR\ \fIdpy\fR]
+[\fB\-s\fR\ \fInum\fR]
+[\fB\-i\fR]
+\fB\-c\fR\ \fIcommand\fR\ [\fB\-c\fR\ \fIcommand\ ...\fR]
+.PD
+.SH "DESCRIPTION"
+\fBratpoison\fR
+is a Window Manager without fat library dependencies, fancy graphics or
+rat dependence.
+.PP
+The screen can be split into non-overlapping frames.
+All windows are kept maximized inside their frames.
+.PP
+All interaction with the window manager is done through
+keystrokes.
+\fBratpoison\fR
+has a prefix map to minimize key clobbering.
+.PP
+The options are as follows:
+.TP 4n
+\fB\-c\fR, \fB\-\-command\fR
+Send ratpoison a command.
+There must be a ratpoison instance running as window manager for the
+given display/screen for this to work.
+Do not forget to quote the command if it contains spaces.
+For example:
+.RS 10n
+\fBratpoison\fR \fB\-c\fR "\fIecho hello world\fR"
+.RE
+.TP 4n
+\fB\-d\fR, \fB\-\-display\fR \fIdisplay\fR
+Set the X display to use or send commands to.
+.TP 4n
+\fB\-f\fR, \fB\-\-file\fR \fIfilename\fR
+Specify an alternate configuration file.
+If this is not given,
+\fBratpoison\fR
+will try
+\fI$HOME/.ratpoisonrc\fR
+and if that does not exist
+\fI/etc/ratpoisonrc\fR
+and execute each command when starting up.
+.TP 4n
+\fB\-h\fR, \fB\-\-help\fR
+Show summary of options.
+.TP 4n
+\fB\-i\fR, \fB\-\-interactive\fR
+Execute commands given with
+\fB\-c\fR
+or
+\fB\-\-command\fR
+in interactive mode.
+That means it will behave exactly as if called with
+\fBC\-t \&:\fR
+like prompting for missing arguments and things like that.
+.TP 4n
+\fB\-s\fR, \fB\-\-screen\fR \fInumber\fR
+Only use the specified screen.
+.TP 4n
+\fB\-v\fR, \fB\-\-version\fR
+Show version of program.
+.SH "KEY BINDINGS"
+To avoid conflicts with other programs, all default ratpoison key
+bindings start with an escape key, per default
+\fBC\-t\fR
+(read Control\-t).
+Some important default key bindings:
+.TP 8n
+\fBC\-t \&?\fR
+Show key bindings
+.TP 8n
+\fBC\-t c\fR
+Start an X terminal
+.TP 8n
+\fBC\-t n\fR
+Switch to next window
+.TP 8n
+\fBC\-t p\fR
+Switch to previous window
+.TP 8n
+\fBC\-t 1\fR | \fB2\fR | \fB3\fR | \fB4\fR | \fB5\fR | \fB6\fR | \fB7\fR | \fB8\fR | \fB9\fR
+Switch to window number 1 | 2 | ...
+.TP 8n
+\fBC\-t k\fR
+Close the current window
+.TP 8n
+\fBC\-t K\fR
+XKill the current application
+.TP 8n
+\fBC\-t s\fR | \fBS\fR
+Split the current frame into two vertical | horizontal ones
+.TP 8n
+\fBC\-t Tab\fR | \fBLeft\fR | \fBUp\fR | \fBRight\fR | \fBDown\fR
+Switch to the next | left | top | right | bottom frame.
+.TP 8n
+\fBC\-t Q\fR
+Make the current frame the only one
+.TP 8n
+\fBC\-t \&:\fR
+Execute a ratpoison command
+.PP
+Further default key bindings can be found in parentheses after the
+commands in the next section.
+.SH "COMMANDS AND DEFAULT ALIASES"
+.TP 8n
+\fBabort\fR
+(\fBC\-t C\-g\fR)
+Do nothing and that successfully.
+(Useful if you pressed
+\fBC\-t\fR
+in error)
+\&.
+.TP 8n
+\fBaddhook\fR \fIevent command\fR
+Add a hook: run
+\fIcommand\fR
+whenever
+\fIevent\fR
+is called.
+Possible events are:
+.PP
+.RS 8n
+.PD 0
+.TP 8n
+\fBdeletewindow\fR
+Run after a window is withdrawn.
+.PD
+.TP 8n
+\fBnewwindow\fR
+Run after a new window is mapped.
+.TP 8n
+\fBkey\fR
+Run whenever a top level key is pressed (by default
+\fBC\-t\fR).
+.TP 8n
+\fBquit\fR
+Run before exiting
+\fBratpoison\fR.
+.TP 8n
+\fBrestart\fR
+.br
+Run before restarting
+\fBratpoison\fR.
+.TP 8n
+\fBswitchframe\fR
+Run after a frame actually switched, but before the window in it is
+focused.
+.TP 8n
+\fBswitchgroup\fR
+Run after selecting a new group.
+.TP 8n
+\fBswitchscreen\fR
+Run when the user switches to a different screen.
+.TP 8n
+\fBswitchwin\fR
+Run after a new window is selected.
+(With dedication, it may already be inactive again, if it was put into
+another frame)
+.PD 0
+.PP
+.RE
+.PD
+.TP 8n
+\fBalias\fR \fIalias command\fR
+Add
+\fIalias\fR
+as new way to call
+\fIcommand\fR.
+.TP 8n
+\fBbind\fR \fIkey command\fR
+alias for
+"\fBdefinekey\fR \fRroot\fR \fIkey command\fR"
+.TP 8n
+\fBbanish\fR
+(\fBC\-t b\fR)
+Banish the rat cursor to the lower right corner of the screen.
+.TP 8n
+\fBbanishrel\fR
+Banish the rat cursor to the lower right corner of the current window.
+If there isn't a window in the current frame, it banishes the rat cursor
+to the lower right corner of the frame.
+.TP 8n
+\fBchdir\fR [\fIdirectory\fR]
+If the optional argument is given, change the current directory
+of
+\fBratpoison\fR
+to
+\fIdirectory\fR.
+If nothing is given, change it to the value of the environment variable
+"\fRHOME\fR".
+.TP 8n
+\fBclrunmanaged\fR
+Clears the unmanaged window list.
+.TP 8n
+\fBcnext\fR
+Like
+\fBnext\fR
+but switch to the next window with another resource class than the
+current one.
+(That means the next window belonging to another type of application
+than the current one.)
+.TP 8n
+\fBcprev\fR
+Like
+\fBprev\fR
+but switch to the previous window with another resource class than the
+current one.
+(That means the previous window belonging to another type of application
+than the current one.)
+.TP 8n
+\fBcolon\fR \fIratpoison\-command\fR (\fBC\-t \&:\fR)
+Execute
+\fIratpoison\-command\fR
+interactively.
+(i.e. ask for possible missing arguments.)
+.TP 8n
+\fBcother\fR
+Like
+\fBother\fR
+but switch to the window of the current group that was last accessed and
+has another resource class but is not currently visible.
+.TP 8n
+\fBcurframe\fR (\fBC\-t F\fR)
+Show a bar marking the current frame.
+.TP 8n
+\fBdefinekey\fR \fIkeymap key command\fR
+Add a new key binding in
+\fIkeymap\fR
+for
+\fIkey\fR
+to execute
+\fIcommand\fR.
+Default keymaps are
+\fRtop\fR
+normally only containing
+\fBC\-t\fR,
+which reads a key from
+\fRroot\fR,
+containing all the normal commands.
+.sp
+Note that you have to describe ":" by "colon", "!" by "exclam" and so on.
+If you cannot guess a name of a key, try either
+\fBC\-t\fR \fIkey\fR
+and look at the error message, or try
+\fB:describekey\fR \fRroot\fR
+and pressing the key.
+.TP 8n
+\fBdedicate\fR [\fB0\fR | \fB1\fR]
+Consider the current frame dedicated/chaste
+(\fB1\fR)
+or promiscuous
+(\fB0\fR).
+.sp
+A dedicated frame will not accept new windows.
+When new windows are to be focused, they will be opened in a non-dedicated
+frame instead.
+.sp
+If no argument is given, toggle the current dedicateness. By default no
+windows are dedicated.
+.TP 8n
+\fBdelete\fR (\fBC\-t k\fR)
+Close the current window.
+.TP 8n
+\fBdelkmap\fR \fIkeymap\fR
+Deletes the keymap named
+\fIkeymap\fR,
+that was generated with
+\fBnewkmap\fR.
+The keymaps
+\fRtop\fR
+(or whatever was specified by
+\fBset\fR \fItopkmap\fR)
+and
+\fRroot\fR
+cannot be deleted.
+.TP 8n
+\fBdescribekey\fR \fIkeymap\fR
+Grab the next key. Similar to
+\fBreadkey\fR,
+\fBdescribekey\fR
+shows only the command in
+\fIkeymap\fR,
+that would be executed by
+\fBreadkey\fR.
+.TP 8n
+\fBecho\fR \fItext\fR
+Show
+\fItext\fR
+as
+\fBratpoison\fR
+message.
+.TP 8n
+\fBescape\fR \fIkey\fR
+Update the default escape key to
+\fIkey\fR.
+.sp
+Strictly speaking it updates the
+\fBreadkey\fR \fRroot\fR
+command in the keymap
+\fRtop\fR
+to
+\fIkey\fR,
+the
+\fBother\fR
+binding
+in
+\fRroot\fR
+to
+\fIkey\fR,
+and
+\fBmeta\fR
+binding in
+\fRroot\fR
+to
+\fIkey\fR
+without modifiers or
+\fBC\-\fR\fIkey\fR
+if
+\fIkey\fR
+has no modifiers.
+(If
+\fBset\fR \fItopkmap\fR
+was called with an argument other than
+\fItop\fR
+that will be used instead of
+\fItop\fR.)
+.TP 8n
+\fBexchangedown\fR (\fBC\-t C\-Down\fR)
+Exchange the window in the current frame with the window in the frame
+below the current frame.
+.TP 8n
+\fBexchangeleft\fR (\fBC\-t C\-Left\fR)
+Exchange the window in the current frame with the window in the frame
+left of the current frame.
+.TP 8n
+\fBexchangeright\fR (\fBC\-t C\-Right\fR)
+Exchange the window in the current frame with the window in the frame
+right of the current frame.
+.TP 8n
+\fBexchangeup\fR (\fBC\-t C\-Up\fR)
+Exchange the window in the current frame with the window in the frame
+above the current frame.
+.TP 8n
+\fBexec\fR \fIshell\-command\fR (\fBC\-t \&!\fR)
+Spawn a shell executing
+\fIshell\-command\fR.
+.TP 8n
+\fBexeca\fR \fIshell\-command\fR
+Spawn a shell executing
+\fIshell\-command\fR,
+without remembering the current frame, so that _NET_WM_PID declaring
+programs will be placed into the frame active when they open a window
+instead of the frame active when
+\fBratpoison\fR
+gets this command.
+.TP 8n
+\fBexecf\fR \fIframe shell\-command\fR
+Spawn a shell executing
+\fIshell\-command\fR,
+showing _NET_WM_PID supporting programs in the given frame instead of
+the frame selected when this program is run.
+.TP 8n
+\fBfdump\fR [\fIscreenno\fR]
+Output the defining data for all frames of the current screen, or
+for screen number
+\fIscreenno\fR
+if this is specified.
+.TP 8n
+\fBfocus\fR (\fBC\-t Tab\fR)
+Focus the next frame.
+.TP 8n
+\fBfocuslast\fR
+Switch to the last selected focus.
+.TP 8n
+\fBfocusleft\fR (\fBC\-t Left\fR)
+Switch to the frame to the left of the current one.
+.TP 8n
+\fBfocusdown\fR (\fBC\-t Down\fR)
+Switch to the frame beneath the current one.
+.TP 8n
+\fBfocusright\fR (\fBC\-t Right\fR)
+Switch to the frame to the right of the current one.
+.TP 8n
+\fBfocusprev\fR
+Focus the previous frame.
+.TP 8n
+\fBfocusup\fR (\fBC\-t Up\fR)
+Switch to the frame above the current one.
+.TP 8n
+\fBfrestore\fR \fIframes\fR
+Replace the current frames with the ones specified in
+\fIframes\fR
+in the format as generated by
+\fBfdump\fR.
+.TP 8n
+\fBfselect\fR [\fIframeno\fR] (\fBC\-t f\fR)
+If an argument is supplied, switch to a frame given by number
+\fIframeno\fR.
+.sp
+If no argument is given, show a frame selector in each frame and wait for
+a key to be pressed.
+If the key matches an existing frame selector, this frame gets focused.
+.sp
+Frame selectors are by default the numbers starting with zero, but they
+can be changed by
+\fBset\fRting
+\fIframesels\fR.
+.TP 8n
+\fBgdelete\fR [\fIgroup\fR]
+If the optional argument
+\fIgroup\fR
+is supplied, delete
+\fIgroup\fR.
+Otherwise delete the current group. If the last group is deleted, a new
+group with name
+\fRdefault\fR
+is created.
+The group has to be empty, otherwise it cannot be deleted.
+.TP 8n
+\fBgetenv\fR \fIvariable\fR
+Output the value of the environment variable
+\fIvariable\fR.
+.TP 8n
+\fBgetsel\fR
+Paste the current X Selection into the current window.
+.TP 8n
+\fBgmerge\fR \fIgroup\fR
+Move all windows from group
+\fIgroup\fR
+into the current group.
+.TP 8n
+\fBgmove\fR \fIgroup\fR
+Move the current window into group
+\fIgroup\fR.
+.TP 8n
+\fBgnew\fR \fIgroup\fR
+Create a new group with name
+\fIgroup\fR
+and select it.
+Most window commands only see (and thus select, consider next,
+previous or last) windows within the group active when they are
+issued.
+.TP 8n
+\fBgnewbg\fR \fIgroup\fR
+Create a new group named
+\fIgroup\fR,
+but do not select it.
+.TP 8n
+\fBgnext\fR
+Select the next group.
+Most window commands only see windows in the effective group.
+.TP 8n
+\fBgnumber\fR [\fIold new\fR]
+Give the number
+\fInew\fR
+to the group with the number
+\fIold\fR
+or the current group.
+.TP 8n
+\fBgother\fR
+Select the last accessed group.
+Most window commands only see windows in the effective group.
+.TP 8n
+\fBgprev\fR
+Select the prior group.
+Most window commands only see windows in the effective group.
+.TP 8n
+\fBgravity\fR [\fBnw\fR | \fBw\fR | \fBsw\fR | \fBn\fR | \fBc\fR | \fBs\fR | \fBne\fR | \fBe\fR | \fBse\fR]
+Change how in its frame the current window is aligned.
+.TP 8n
+\fBgrename\fR
+.br
+Rename current group.
+.TP 8n
+\fBgroups\fR
+Output a list of all groups with their number.
+.TP 8n
+\fBgselect\fR \fIgroup\fR
+Select the group named
+\fIgroup\fR.
+.TP 8n
+\fBhelp\fR [\fIkeymap\fR]
+If the optional parameter
+\fIkeymap\fR
+is given, list all keybindings in this keymap, otherwise list all key
+bindings in keymap
+\fRroot\fR.
+.TP 8n
+\fBhsplit\fR [\fIl\fR\fR/\fR\fIp\fR | [\fR\-\fR]\fIpixels\fR] (\fBC\-t S\fR)
+Split the current frame into left frame and a right frame.
+If no parameter is given, split in halves.
+If two numbers separated by a slash
+(\(oq/\(cq)
+are given, the left one is
+\fIl\fR
+times the
+\fIp\fRth
+part and the right one
+(\fIp\fR \fR\-\fR \fIl\fR)
+times the
+\fIp\fRth
+part of the prior width.
+Otherwise the right half is
+\fIpixels\fR
+wide or the left one is
+\fIpixels\fR
+wide, depending whether there is
+\(oq\-\(cq
+in front of the number or not.
+.TP 8n
+\fBinext\fR
+Like
+\fBnext\fR
+but switch to the next window with the same resource class as the
+current one.
+(That means the next window belonging to the same application
+as the current one.)
+.TP 8n
+\fBinfo\fR (\fBC\-t i\fR)
+Output the current the width, height, window number and window name of
+the current window.
+(What name means is chosen by
+\(Lq\fBset\fR \fIwinname\fR\(Rq.)
+.TP 8n
+\fBiprev\fR
+Like
+\fBprev\fR
+but switch to the previous window with the same resource class as the
+current one.
+(That means the previous window belonging to the same application as the
+current one.)
+.TP 8n
+\fBiother\fR
+Like
+\fBother\fR
+but switch to the window of the current group that was last accessed and
+has the same resource class but is not currently visible.
+.TP 8n
+\fBkill\fR (\fBC\-t K\fR)
+Close the X-connection of the X-client responsible for the current window.
+.TP 8n
+\fBlastmsg\fR (\fBC\-t m\fR)
+Reshow the last message.
+.TP 8n
+\fBlicense\fR (\fBC\-t V\fR)
+Show
+\fBratpoison\fR's license.
+.TP 8n
+\fBlink\fR \fIkey\fR [\fIkeymap\fR]
+Do what
+\fIkey\fR
+is bound to in the keymap
+\fIkeymap\fR
+if supplied.
+Otherwise what
+\fIkey\fR
+is bound to in keymap
+\fRroot\fR.
+.TP 8n
+\fBlisthook\fR \fIevent\fR
+List all commands specified with
+\fBaddhook\fR
+to be executed when even
+\fIevent\fR
+occurs.
+.TP 8n
+\fBmeta\fR [\fIkey\fR] (\fBC\-t t\fR)
+Send the escape key (that which normally is
+\fBC\-t\fR)
+to the current window.
+If a
+\fIkey\fR
+is specified, this is sent instead.
+Note that some applications by default ignore the synthetic key that is
+sent using this command as it is considered a security hole.
+xterm is one such application.
+.TP 8n
+\fBmsgwait\fR [\fIseconds\fR]
+Set the duration the message window is shown.
+If
+\fIseconds\fR
+is zero, wait infinitely.
+This command is deprecated, please set the
+\fImsgwait\fR
+variable instead.
+.TP 8n
+\fBnewkmap\fR \fIkeymap\fR
+Generate a new keymap named
+\fIkeymap\fR.
+This keymap can be used to add new key-command mappings to it with
+\fBdefinekey\fR
+and can be called with
+\fBreadkey\fR.
+.TP 8n
+\fBnewwm\fR \fInew-window-manager\fR
+Quit
+\fBratpoison\fR
+and execute
+\fInew-window-manager\fR
+instead.
+.TP 8n
+\fBnext\fR (\fBC\-t Return\fR | \fBC\-t n\fR | \fBC\-t space\fR)
+Switch to the next window in the current group.
+.TP 8n
+\fBnextscreen\fR (\fBC\-t N\fR)
+Switch to the next screen. (If you have multiple physical ones.)
+.TP 8n
+\fBnumber\fR \fInew\fR [\fIold\fR]
+Give the number
+\fInew\fR
+to the window with the number
+\fIold\fR
+or the current window.
+.TP 8n
+\fBonly\fR (\fBC\-t Q\fR)
+Remove all frames on the current screen except the current frame and
+maximize this one to the size of the whole screen.
+.TP 8n
+\fBother\fR (\fBC\-t C\-t\fR)
+Switch to the window of the current group that was last
+accessed but is not currently visible.
+.TP 8n
+\fBprev\fR (\fBC\-t p\fR)
+Switch to the previous window in the current group.
+.TP 8n
+\fBprevscreen\fR (\fBC\-t P\fR)
+Switch to the previous screen. (If you have multiple physical ones.)
+.TP 8n
+\fBprompt\fR [\fIprompt\fR]
+\fBratpoison\fR
+will ask the user for input, showing
+\fIprompt\fR
+(or a single colon, if no argument is given) and output the input the
+user has made.
+Note that this command probably does not make much sense in interactive
+mode.
+.TP 8n
+\fBputsel\fR \fIx\-selection\fR
+Replace the X selection with the text
+\fIx\-selection\fR.
+It can be inserted into the current window with
+\fBgetsel\fR.
+.TP 8n
+\fBquit\fR
+Quit
+\fBratpoison\fR.
+.TP 8n
+\fBratinfo\fR
+.br
+Display the x y coordinates of the rat cursor relative to the screen.
+.TP 8n
+\fBratrelinfo\fR
+Display the x y coordinates of the rat cursor relative to the current
+window or current frame if no window is focused
+.TP 8n
+\fBratwarp\fR \fIx y\fR
+Move the rat cursor to the position
+(\fIx\fR, \fIy\fR).
+.TP 8n
+\fBratrelwarp\fR \fIdeltax deltay\fR
+Move the rat cursor to
+(\fIdeltax\fR, \fIdeltay\fR),
+relative to the current position.
+.TP 8n
+\fBratclick\fR [\fIbutton\fR]
+Simulate a rat click with
+\fIbutton\fR
+(button 1=left button if none given).
+.TP 8n
+\fBrathold\fR (\fBup\fR | \fBdown\fR) [\fIbutton\fR]
+Simulate pressing|releasing rat button
+\fIbutton\fR
+(1=left button if none given).
+.TP 8n
+\fBreadkey\fR \fIkeymap\fR
+Grab the next key pressed, and execute the command associated to this key
+in
+\fIkeymap\fR.
+To show it is waiting for a key,
+\fBratpoison\fR
+will change the rat cursor to a square if
+\fIwaitcursor\fR
+is set.
+This command is perhaps best described with its usage in the default
+configuration: by pressing
+\fBC\-t\fR,
+which is the only key in the keymap
+top ,
+the command
+"\fBreadkey\fR \fIroot\fR"
+is executed.
+The next key then executes the command in keymap
+\fRroot\fR
+belonging to
+this command.
+.TP 8n
+\fBredisplay\fR (\fBC\-t l\fR)
+Extend the current window to the whole size of its current frame and
+redisplay it.
+(Useful to redisplay normal windows or bring transient windows to the
+full size of the frame as only normal windows are maximized by
+\fBratpoison\fR)
+.TP 8n
+\fBredo\fR (\fBC\-t U\fR)
+Revert the last
+\fBundo\fR
+of frame changes.
+.TP 8n
+\fBremhook\fR \fIevent command\fR
+Remove command
+\fIcommand\fR
+from the list of commands to be called when event
+\fIevent\fR
+is hit.
+(The command has to specified, as an event can have multiple commands
+attached to it.)
+Use
+"\fBlisthook\fR \fIhook\fR"
+to get a list of all attached commands.
+.TP 8n
+\fBremove\fR (\fBC\-t R\fR)
+Remove the current frame and extend some frames around to fill the
+remaining gap.
+.TP 8n
+\fBresize\fR [\fIdeltax deltay\fR] (\fBC\-t r\fR)
+If
+\fIdeltax\fR
+and
+\fIdeltay\fR
+are supplied, resize the current frame by that (i.e. move the bottom
+right corner by the given offsets and then move this frame and resize
+adjacent frames to make the frames fill the whole screen again.)
+.sp
+If in interactive mode no arguments are supplied, resize the current
+frame interactively:
+.sp
+.RS 10n
+.PD 0
+.TP 15n
+\fBReturn\fR
+finish resizing
+.TP 15n
+\fBC\-g\fR, \fBEscape\fR
+abort resizing
+.TP 15n
+\fBC\-n\fR, \fBDown\fR, \fBj\fR
+grow vertically
+.TP 15n
+\fBC\-p\fR, \fBUp\fR, \fBk\fR
+shrink vertically
+.TP 15n
+\fBC\-f\fR, \fBRight\fR, \fBl\fR
+.br
+grow horizontally
+.TP 15n
+\fBC\-b\fR, \fBUp\fR, \fBh\fR
+shrink horizontally
+.TP 15n
+\fBs\fR
+shrink to size of current window
+.RE
+.RS 8n
+.sp
+While resizing interactively, changes are in multiples of the amount
+of pixels given by
+\fBset\fR \fBresizeunit\fR
+(by default 10).
+.RE
+.PD
+.TP 8n
+\fBrestart\fR
+.br
+Restart
+\fBratpoison\fR.
+.TP 8n
+\fBrudeness\fR [\fIrudeness\fR]
+This command is deprecated, please use the
+\fIrudeness\fR
+variable instead.
+.TP 8n
+\fBsdump\fR
+Output the list of all screens.
+The screens are separated by commas. Each screen is shown as 6 values:
+its number, its x-coordinate, its y-coordinate, its width, its height
+and if it is currently selected (1=true, 0=false).
+.TP 8n
+\fBselect\fR (\fB\-\fR | \fIname\fR | \fInumber\fR) (\fBC\-t \&'\fR)
+If a number is given, switch to the window with number
+\fInumber\fR.
+If a name is given, switch to the window in the current group with
+name
+\fIname\fR.
+Blank the current frame, if
+\fB\-\fR
+is given.
+.TP 8n
+\fBset\fR [\fIvariable\fR [\fIvalue\fR]]
+If no argument is given, output all
+\fBratpoison\fR
+variables and their values.
+.sp
+If one argument is given, output the value of
+\fBratpoison\fR
+variable
+\fIvariable\fR.
+Otherwise set
+\fIvariable\fR
+to
+\fIvalue\fR.
+What values are valid depends on the variable.
+See the section
+\fIVARIABLES\fR
+later in this document for details.
+.TP 8n
+\fBsetenv\fR \fIvariable value\fR
+Set the environment variable
+\fIvariable\fR
+to
+\fIvalue\fR.
+(Environment variables will be passed to all programs started from
+\fBratpoison\fR.)
+.TP 8n
+\fBsfdump\fR
+Output all frames similar to
+\fBfdump\fR,
+but not limited to one screen, but all screens at once and with the
+screen number after each frame.
+.TP 8n
+\fBsfrestore\fR \fIframes\fR
+Replace the current frames with the ones specified in
+\fIframes\fR
+in the format as generated by
+\fBsfdump\fR.
+.TP 8n
+\fBshrink\fR
+Shrink the current frame to the size of the current window with in.
+.TP 8n
+\fBsplit\fR [\fIsplit\fR] (\fBC\-t s\fR)
+alias for
+\fBvsplit\fR
+.TP 8n
+\fBsource\fR \fIfile\fR
+Read
+\fIfile\fR
+and execute each line as
+\fBratpoison\fR
+command.
+.TP 8n
+\fBsselect\fR \fIscreennumber\fR
+Switch to the screen
+\fIscreennumber\fR.
+(If you have multiple physical ones.)
+.TP 8n
+\fBstartup_message\fR (\fBon\fR | \fBoff\fR)
+Select whether
+\fBratpoison\fR
+will show a startup message or not.
+This command is deprecated, please use the
+\fIstartupmessage\fR
+variable instead.
+.TP 8n
+\fBswap\fR \fIdest-frame\fR [\fIsrc-frame\fR] (\fBC\-t x\fR)
+Exchange the window in
+\fIsrc\-frame\fR
+(or the current frame if there is no second argument) with the window
+\fIdest\-frame\fR
+(or ask interactively which frame to swap with if there is no argument).
+.TP 8n
+\fBtime\fR (\fBC\-t a\fR)
+Output current data and time.
+.TP 8n
+\fBtitle\fR \fInewname\fR (\fBC\-t A\fR)
+Overwrite the title of the current window with
+\fInewname\fR.
+All following
+\fBratpoison\fR
+commands will only know the window under the new name.
+.TP 8n
+\fBtmpwm\fR \fItmpwm\fR
+Temporarily give control over to the other window manager
+\fItmpwm\fR,
+reclaiming control when that WM terminates.
+.TP 8n
+\fBunalias\fR \fIalias\fR
+Remove the alias
+\fIalias\fR.
+.TP 8n
+\fBunbind\fR \fIkey\fR
+alias for
+.RS 14n
+\fBundefinekey\fR \fIroot key\fR
+.RE
+.TP 8n
+\fBundefinekey\fR \fIkeymap key\fR
+Remove the binding for
+\fIkey\fR
+from
+\fIkeymap\fR.
+.TP 8n
+\fBundo\fR (\fBC\-t _\fR, \fBC\-t u\fR)
+Un\-do the last change to the frameset.
+(Like splitting, resizing, deleting, ...)
+.sp
+The amount of steps that can be undone is specified by the variable
+\fImaxundos\fR.
+.TP 8n
+\fBunmanage\fR [\fIname\fR]
+Add
+\fIname\fR
+to the list of unmanaged windows.
+Thus, windows of this name will not be managed but allowed to choose
+their position themselves.
+.sp
+In non\-interactive mode calling it without arguments will print the list.
+.sp
+The list can be cleared again by calling
+\fBclrunmanaged\fR.
+.TP 8n
+\fBunsetenv\fR \fIvariable\fR
+Remove variable
+\fIvariable\fR
+from the list of environment variables.
+.TP 8n
+\fBverbexec\fR \fIcmdline\fR
+Spawn a shell executing
+\fIcmdline\fR
+after showing a message with the command.
+.TP 8n
+\fBversion\fR (\fBC\-t v\fR)
+Output version and compile time information.
+.TP 8n
+\fBvsplit\fR [\fIl\fR\fR/\fR\fIp\fR | \fIpixels-from-top\fR | \fR\-\fR\fIpixels-from-bottom\fR] (\fBC\-t s\fR)
+Split the current frame into upper frame and a lower frame.
+If no parameter is given, split in halves.
+If two numbers separated by a slash
+(\(Lq\fR/\fR\(Rq)
+are given, the upper one is
+\fIl\fR
+times the
+\fIp\fRth part and the lower one
+(\fIp\fR \fR\-\fR \fIl\fR)
+times the
+\fIp\fRth
+part of the prior height.
+Otherwise the lower one is
+\fIpixels from bottom\fR
+wide or the upper one
+\fIpixels from top\fR
+high, depending whether there is a
+\(Lq\fR\-\fR\(Rq
+in front of the number or not.
+.TP 8n
+\fBwarp\fR (\fBon\fR | \fBoff\fR)
+Select if focusing a window moves the rat cursor to the place it had been last
+time this window was focused, or not.
+This command is deprecated, please set the
+\fIwarp\fR
+variable instead.
+.TP 8n
+\fBwindows\fR [\fIformat\fR] (\fBC\-t w\fR)
+In interactive mode,
+show the list of all windows in the current group for the duration
+specified by the variable
+\fImsgwait\fR.
+If
+\fImsgwait\fR
+was zero, toggle between indefinitely showing and not showing.
+.sp
+The messages are shown in columns or rows depending on the value of
+\fIwinliststyle\fR
+in the format set by
+\fBset\fR \fIwinfmt\fR.
+The following substitutions happen in format:
+.sp
+.RS 10n
+.PD 0
+.TP 4n
+\fR%a\fR
+application name (resource name)
+.TP 4n
+\fR%c\fR
+resource class
+.TP 4n
+\fR%f\fR
+frame number
+.TP 4n
+\fR%g\fR
+gravity of the window
+.TP 4n
+\fR%h\fR
+height of the window
+.TP 4n
+\fR%H\fR
+unit to resize the window vertically (height_inc)
+.TP 4n
+\fR%i\fR
+X Window ID
+.TP 4n
+\fR%p\fR
+process ID
+.TP 4n
+\fR%l\fR
+last access number
+.TP 4n
+\fR%M\fR
+string
+\fRMaxsize\fR,
+if it specifies a maximum size
+.TP 4n
+\fR%n\fR
+window number
+.TP 4n
+\fR%s\fR
+window status
+(\(oq*\(cq
+is active window,
+\(oq+\(cq
+would be chosen by
+\fBother\fR,
+\(oq\-\(cq
+otherwise)
+.TP 4n
+\fR%S\fR
+screen number
+.TP 4n
+\fR%t\fR
+window name
+(see
+\fBset\fR \fIwinname\fR)
+,
+.TP 4n
+\fR\&%T\fR
+the string
+\(Lq\fRTransient\fR\(Rq,
+if it is a transient window
+.TP 4n
+\fR%w\fR
+width of the window
+.TP 4n
+\fR%W\fR
+unit to resize the window horizontally (width_inc)
+.TP 4n
+\fR%x\fR
+xine screen number
+.TP 4n
+\fR%%\fR
+litteral
+\(oq%\(cq
+.RE
+.RS 8n
+.sp
+Additionally there can be a positive decimal integer number between the
+percent sign and the format string to specify the length this value
+should be truncated to if longer.
+(For example:
+\fR%20t\fR)
+.sp
+In non\-interactive mode, output the list of windows in the current group
+line by line. The format string can be overwritten by the optional parameter
+\fIformat\fR.
+.RE
+.PD
+.SH "VARIABLES"
+\fBratpoison\fR
+variables can be shown and set with
+\fBset\fR.
+The following variables are supported:
+.TP 8n
+\fBresizeunit\fR \fIpixels\fR
+Set the amount of pixels interactive
+\fBresize\fR
+will add/subtract in each step.
+.sp
+Default is 5.
+.TP 8n
+\fBmaxundos\fR \fInumber\fR
+The maximal amount of step
+\fBratpoison\fR
+can undo with the
+\fBundo\fR
+command.
+.sp
+Default is 20.
+.TP 8n
+\fBwingravity\fR \fRnw\fR | \fRw\fR | \fRsw\fR | \fRn\fR | \fRc\fR | \fRs\fR | \fRne\fR | \fRe\fR | \fRse\fR
+Set the default gravity new normal windows will get.
+Possible values are the same as in the
+\fBgravity\fR
+command, which changes the gravity of an existing window: cardinal
+points or numbers 1 to 9.
+.sp
+Default is
+\fRnw\fR.
+.TP 8n
+\fBmaxsizegravity\fR \fRnw\fR | \fRw\fR | \fRsw\fR | \fRn\fR | \fRc\fR | \fRs\fR | \fRne\fR | \fRe\fR | \fRse\fR
+Set the default gravity new self-maximized windows will get.
+Possible values are the same as in the
+\fBgravity\fR
+command, which changes the gravity of an existing window: cardinal
+points or numbers 1 to 9.
+.sp
+Default is
+\fRc\fR.
+.TP 8n
+\fBtransgravity\fR \fRnw\fR | \fRw\fR | \fRsw\fR | \fRn\fR | \fRc\fR | \fRs\fR | \fRne\fR | \fRe\fR | \fRse\fR
+Set the default gravity new transient windows will get.
+Possible values are the same as in the
+\fBgravity\fR
+command, which changes the gravity of an existing window: cardinal
+points or numbers 1 to 9.
+.sp
+Default is
+\fRc\fR.
+.TP 8n
+\fBbargravity\fR \fRnw\fR | \fRw\fR | \fRsw\fR | \fRn\fR | \fRc\fR | \fRs\fR | \fRne\fR | \fRe\fR | \fRse\fR
+Select the location where message and prompt bars appear.
+.sp
+Default is
+\fRne\fR.
+.TP 8n
+\fBfont\fR \fIfont\fR
+Make
+\fBratpoison\fR
+use font
+\fIfont\fR.
+.TP 8n
+\fBpadding\fR \fIleft top right bottom\fR
+Set how much space at the borders of the screen will not be used.
+.sp
+Default is
+\fR0 0 0 0\fR.
+.TP 8n
+\fBborder\fR \fIpixels\fR
+Selects how thick the frame around windows is.
+.sp
+Default is
+\fR1\fR.
+.TP 8n
+\fBbarborder\fR \fIpixels\fR
+Selects how thick the frame around
+\fBratpoison\fR's
+prompt or message windows is.
+.sp
+Default is
+\fR1\fR.
+.TP 8n
+\fBinputwidth\fR \fIpixels\fR
+Determine the width of the input window.
+.sp
+Default is
+\fR200\fR.
+.TP 8n
+\fBbarinpadding\fR \fR0\fR | \fR1\fR
+If there is padding, determines whether the bar appears at the edge of
+the screen
+(\fR1\fR)
+or at the edge of the window area
+(\fR0\fR).
+.sp
+Default is
+\fR0\fR.
+.TP 8n
+\fBtopkmap\fR \fIkmap\fR
+Make
+\fIkmap\fR
+the top keymap
+\fBratpoison\fR
+grabs directly.
+.sp
+The default value is
+\fRtop\fR.
+.TP 8n
+\fBwaitcursor\fR \fR0\fR | \fR1\fR
+Determine whether to change the rat cursor when waiting for a key
+(\fR1\fR)
+or not
+(\fR0\fR)
+See
+\fBreadkey\fR
+and
+\fBdescribekey\fR.
+.sp
+Default is
+\fR1\fR.
+.TP 8n
+\fBwinfmt\fR \fIformat\fR
+Choose the default format for the the
+\fBwindows\fR
+command.
+.sp
+Default is
+\fR%n%s%t\fR.
+.TP 8n
+\fBwinname\fR \fRtitle\fR | \fRname\fR | \fRclass\fR
+Choose what is considered the "name" of the window by
+\fBratpoison\fR:
+.PP
+.RS 8n
+.PD 0
+.TP 8n
+title
+The title of the window.
+.TP 8n
+name
+The resource name of the window.
+.TP 8n
+class
+The resource class i.e. the name of the application.
+.PD
+.PP
+Default is
+\fRtitle\fR.
+.RE
+.TP 8n
+\fBfgcolor\fR \fIcolor\fR
+The foreground color of the windows
+\fBratpoison\fR
+creates.
+.sp
+Default is
+\fRblack\fR.
+.TP 8n
+\fBbgcolor\fR \fIcolor\fR
+The background color of the windows
+\fBratpoison\fR
+creates.
+.sp
+Default is
+\fRwhite\fR.
+.TP 8n
+\fBfwcolor\fR \fIcolor\fR
+The border color of the focused window.
+.sp
+Default is
+\fRblack\fR.
+.TP 8n
+\fBbwcolor\fR \fIcolor\fR
+The border color of unfocused windows.
+.sp
+Default is
+\fRblack\fR.
+.TP 8n
+\fBbarpadding\fR \fIx y\fR
+Set horizontal padding of
+\fBratpoison\fR
+windows to
+\fIx\fR
+and vertical padding to
+\fIy\fR.
+.sp
+Default is
+\fR4 0\fR.
+.TP 8n
+\fBwinliststyle\fR \fRrow\fR | \fRcolumn\fR
+Determines whether windows are shown in rows or in columns.
+.sp
+Default is column.
+.TP 8n
+\fBframesels\fR \fIselectors\fR
+Override the frame selectors
+\fBfselect\fR
+uses.
+The first character is the selector for the first frame,
+the second character is the selector for the second frame and so on.
+.sp
+Using this variable, one can directly access more than 10 frames.
+.sp
+Default is an empty string, which is equivalent to "0123456789".
+.TP 8n
+\fBhistorysize\fR \fInumber\fR
+Specify maximum number of values kept in input history.
+.sp
+Default is
+\fR20\fR.
+.TP 8n
+\fBhistorycompaction\fR \fR0\fR | \fR1\fR
+Decide if new input lines added to history delete
+older equal lines from history.
+.sp
+Default is
+\fR1\fR
+(on).
+.TP 8n
+\fBhistoryexpansion\fR \fR0\fR | \fR1\fR
+Decide if history expansion using ! is available.
+(Can only be activated when compiled with readline's libhistory.)
+.TP 8n
+\fBmsgwait\fR \fIseconds\fR
+The duration the message window is shown.
+If
+\fIseconds\fR
+is zero, wait infinitely.
+.TP 8n
+\fBframemsgwait\fR \fIseconds\fR
+The duration the
+\(oqCurrent frame\(cq
+indicator is shown.
+If
+\fIseconds\fR
+is zero, wait until the next interactive command.
+If
+\fIseconds\fR
+is
+\fR-1\fR,
+don't show any message.
+.TP 8n
+\fBstartupmessage\fR \fR0\fR | \fR1\fR
+Decide whether to show a greeting message at startup.
+.TP 8n
+\fBwarp\fR \fR0\fR | \fR1\fR
+Decide if focusing a window moves the rat cursor to the place it had
+been last time this window was focused, or not.
+.sp
+Default is
+\fR0\fR
+(off).
+.TP 8n
+\fBrudeness\fR \fInumber\fR
+Show or set what kind of windows are allowed to jostle into the
+foreground.
+.sp
+\fInumber\fR
+is a bitwise OR of the following values:
+.sp
+.RS 10n
+.PD 0
+.TP 4n
+1
+Transient windows may raise.
+.TP 4n
+2
+Normal windows may raise.
+.TP 4n
+4
+New transient windows end up in the foreground.
+.TP 4n
+8
+New normal windows end up in the foreground.
+.RE
+.RS 8n
+.sp
+Default is all allowed i.e.\& 15.
+.RE
+.PD
+.SH "FILES"
+.TP 28n
+\fI~/.ratpoisonrc\fR
+Configuration file read at startup time, if present.
+.PD 0
+.TP 28n
+\fI%%sysconfdir%%/ratpoisonrc\fR
+Fallback configuration file, if
+\fI~/.ratpoisonrc\fR
+is not found.
+.PD
+.SH "EXIT STATUS"
+.br
+The \fBratpoison\fR utility exits\~0 on success, and\~>0 if an error occurs.
+.SH "AUTHORS"
+Upstream author is
+Shawn Betts <\fIsabetts@gmail.com\fR>.
+.PP
+See the
+\fI%%docdir%%/AUTHORS\fR
+file for other contributors.
+.PP
+This manual page was written by
+Bernhard R. Link <\fIbrlink@debian.org\fR>.
+The conversion to the
+mdoc(7)
+language
+(\fBhttp://mdocml.bsd.lv\fR)
+was done by
+Jeremie Courreges-Anglas <\fIjca@wxcvbn.org\fR>.
+.SH "BUGS"
+Please report any bug you find to the ratpoison mailing-list,
+<\fIratpoison-devel@nongnu.org\fR>.
