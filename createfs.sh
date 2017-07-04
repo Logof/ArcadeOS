@@ -1,9 +1,9 @@
-#! /bin/bash
+#! /bin/sh
 if [ ! ${1} ]
 then
-DIR=$(pwd)
-else
-DIR=${1}
+  DIR=$(pwd)
+else 
+  DIR=${1}
 fi
 
 cd $DIR
